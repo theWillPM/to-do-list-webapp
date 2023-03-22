@@ -8,6 +8,7 @@
     <meta name="author" content="Group 2">
     <meta name="viewport" content="width=device-width,  initial-scale=1.0">
     <title>To-Do WebApp</title>
+
     <!-- Javascript & JQuery source files -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
@@ -18,20 +19,24 @@
 </head>
 
 <body>
+    <!-- Top Header with Login / Registration -->
     <header>
         <nav class="nav">
+            <!-- Group Logo -->
             <img src="./img/dark-logo.png" alt="Group 2's logo" class="group-2-logo">
+
+            <!-- Menu -->
             <div class="menu">
                 <div class="user-access">
                     <div class="user-input" id="username">
                         <label for="username-input">Username</label>
                         <input type="text" id="username-input" minlength="6" maxlength="32" name="username-input"
-                        title="username" placeholder="username">
+                        title="username" placeholder="placeholder-for-phase-two">
                     </div>
                     <div class="user-input" id="password">
                         <label for="password-input">Password</label>
                         <input type="password" id="password-input" minlength="4" maxlength="32" name="password-input"
-                        title="password" placeholder="password">
+                        title="password" placeholder="placeholder-for-phase-two">
                     </div>
                 </div>
             </div>
@@ -41,23 +46,21 @@
     <main>
         <!-- Page Title -->
         <h1>To-Do List</h1>
+
         <div class="main">
-            <!-- Input field for item-to-be-added-to-current-list -->
             <div class="main-container">
-
-
-                <!-- Current list title and save to database button -->
                 <div class="container">
-
                     <div class="list-container" id="current-list-container">
-                        <!-- Current list title -> update it when the user writes a title on the input  -->
+
+                        <!-- Current list title and save to database button -->
                         <div class="list-title" id="current-list-title">
                             <label for="current-list-name">List name:</label>
                             <input type="text" id="current-list-name" minlength="1" maxlength="100" name="current-list-name"
-                                title="Enter Custom List Name" placeholder="Unnamed List">
-                            <input type="button" id="save-list-button" value="Save List" title="Click to add this list to the database.">
-                    </div>
+                            title="Enter Custom List Name" placeholder="Unnamed List">
+                            <input type="button" id="save-list-button" value="Save List" title="Click to add this list.">
+                        </div>
                         
+                        <!-- Input field for item-to-be-added-to-current-list -->
                         <div class="add-container">
                             <label for="item-to-add">Item:</label>
                             <input type="text" id="item-to-add" minlength="1" maxlength="100" spellcheck="true" name="item-to-add"
@@ -65,9 +68,9 @@
                                 placeholder="Enter the item to be added here.">
                             <input type="button" class="add-button" value="+" title="Click to add this item to the current list.">
                         </div>
-
+                        
+                        <!-- Display the current list as an ordered(numbered) list -->
                         <ol id="current-list">
-
                             <!-- Add the current item's lists as li elements with the remove button and green-strikethrough-on-click function -->
                             <li class="list-item">Item 1555555555555555555555555testing size
                                 <input type="button"
@@ -83,12 +86,14 @@
                 </div>
             </div>
 
-            <!-- Second main-container: Display the saved lists. Remove buttons should be present -->
+            <!-- Second main-container, with the saved lists-->
             <div class="main-container">
                 
                 <div class="list-container" id="saved-lists-container">
-                    <!-- Current list title -> update it when the user writes a title on the input  -->
+                    <!-- Header in h2 -->
                     <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2>
+
+                    <!-- UL with a list of all saved to-do lists -->
                     <ul id="list-of-saved-lists">
                         <li class="saved-list-title">Saved List Title
                             <input type="button" class="remove-button"
@@ -105,6 +110,7 @@
 
     </main>
 
+    <!-- Footer with copyright -->
     <footer>
         <div class="footer-container">
             <p class="footer-p">
@@ -112,7 +118,6 @@
             </p>
         </div>
     </footer>
-
 </body>
 
 </html>
