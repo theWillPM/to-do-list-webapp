@@ -79,18 +79,12 @@
                                 placeholder="Enter the item to be added here.">
                             <input type="button" class="add-button" id="item-add-button" value="+" title="Click to add this item to the current list.">
                         </div>
-
-                        <!-- Delete all items and delete all lists improvement buttons -->
-                        <div class="qol-buttons">
-                            <input type="button" id="delete-all-items-button" value="Delete All Items" title="Click to delete all items in the current list.">
-                            <input type="button" id="delete-all-lists-button" value="Delete All Lists" title="Click to delete all saved lists.">
-                        </div>         
-                                       
+                        
                         <!-- Display the current list as an ordered(numbered) list -->
                         <ol id="current-list">
                             <!-- Add the current item's lists as li elements with the remove button and green-strikethrough-on-click function -->
                         </ol>
-
+                        <input type="button" id="delete-all-items-button" value="Delete All Items" title="Click to delete all items in the current list.">
                     </div>
                 </div>
             </div>
@@ -102,10 +96,12 @@
                     <!-- Header in h2 -->
                     <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2>
                     <h3>Click a list to display its contents.</h3>
-
+                    
                     <!-- UL with a list of all saved to-do lists -->
                     <ul id="list-of-saved-lists">
                     </ul>
+                    <input type="button" id="delete-all-lists-button" value="Delete All Lists" title="Click to delete all saved lists.">
+
                 </div>
             </div>
         </div>

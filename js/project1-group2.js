@@ -1,3 +1,11 @@
+/** 
+* @name: Project - Phase 1 
+* @Course Code: SODV1201 
+* @class: Software Development Diploma program. 
+* @author: Group 2: Adam Workie, Ely Cuaton, Jeni R Villavicencio, Joefel Cepeda, Willian P Munhoz. 
+*/ 
+
+// JQuery:
 $(document).ready(function () {
     let tasks = [];
     let savedLists = [];
@@ -155,6 +163,12 @@ $(document).ready(function () {
     savedLists.length = 0;
     }
 
+// Detect if user is in Dark Mode and automatically apply it:
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    DarkTheme();
+}
+    
+});
 
 // Functions to allow using ENTER in input fields to complete the action:
     //List Name
@@ -181,21 +195,13 @@ function DarkTheme() {
     $("#css-link").attr("href", "./css/dark_theme.css");
     $("#dark-theme-icon").attr("src", "./img/dark-icon-white.png");
     $("#light-theme-icon").attr("src", "./img/light-icon-white.png");
-
-
 }
+
 function LightTheme() {
     console.log("Changed theme to Light");
     $("#css-link").attr("href", "./css/light_theme.css");
     $("#dark-theme-icon").attr("src", "./img/dark-icon.png");
     $("#light-theme-icon").attr("src", "./img/light-icon.png");
 }
-
-// Detect if user is in Dark Mode and automatically apply it:
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    DarkTheme();
-}
-
-});
 
 

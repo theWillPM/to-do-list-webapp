@@ -87,6 +87,11 @@ nav {
     align-items: center;
 }
 
+#username-input,
+#password-input {
+    max-width: 30vw;
+}
+
 #password {
     gap: 7px;
 }
@@ -98,7 +103,7 @@ nav {
 }
 
 main {
-    min-height: calc(100vh - 71.2px - 60px);
+    min-height: calc(100vh - 60px - 40px);
     padding: 0 10px;
     gap: 10px;
 }
@@ -163,6 +168,7 @@ h1 {
 }
 
 .list-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -170,7 +176,7 @@ h1 {
     flex: 1;
     border: 1px solid var(--main);
     background-color: var(--text-on-input);
-    padding: 8px;
+    padding: 8px 8px 20px;
     border-radius: 6px;
     gap: 10px;
 }
@@ -189,7 +195,6 @@ input {
 #current-list-name, #current-list-name:focus{
     color: var(--background-contrast);
     background-color: var(--small-contrast);
-    border: none;
     outline: none;
     width: 60%;
 }
@@ -243,11 +248,31 @@ input::placeholder{
 }
 
 .remove-icon:hover {
-    box-shadow: 1px 1px 1px var(--main);
+    filter: drop-shadow(1px 1px 2px var(--main));
 }
 
 .add-button {
     color: rgb(20, 150, 0);
+}
+
+#delete-all-items-button,
+#delete-all-lists-button {
+    font-size: 0.8rem;
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    background: none;
+    border: none;
+    border-bottom-right-radius: 6px;
+    color: rgb(102, 0, 0);
+    transition: 0.2s ease-in-out;
+}
+
+#delete-all-items-button:hover,
+#delete-all-lists-button:hover {
+    box-shadow: 2px 2px 1px -1px var(--main);
+    border-right: 1px solid var(--small-contrast);
+    border-bottom: 1px solid var(--small-contrast);
 }
 
 .saved-list-title {
@@ -308,16 +333,23 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 40px;
     background-color: var(--main);
   }
   
   .footer-p {
+    margin: 10px 0px 0px;
+    padding-bottom: 4px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       color: var(--full-contrast);
       text-align: center;
+  }
+
+  .footer-p>span{
+    font-size: 0.8rem;
+
   }
 
   .footer-container {
@@ -326,13 +358,4 @@ footer {
     flex-direction: row;
     background-color: var(--main);
     justify-content: center;
-}
-@media screen and (min-width: 800px) {
-    .list-container {
-        min-height: calc(100vh - 60px - 71.2px - 125px);
-    }
-
-    main{
-        min-height: calc(100vh - 60px - 60px);
-    }
 }
