@@ -33,7 +33,7 @@ nav {
 .user-access {
     color: white;
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
     flex-wrap: wrap;
 }
 
@@ -63,13 +63,22 @@ main {
     gap: 10px;
 }
 
-/* To apply gradient to our H1 heading: */
+/* Page-title */
 h1 {
     color: #ffffff;
     text-shadow:  #333 2px 0 10px;
     font-size: 1.8rem;
+    margin: 10px 0 0;
 }
 
+/* Instructions */
+.main1>p {
+    margin: 10px 0 0;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* The primary containers in the main section */
 .main-container {
     display: flex;
     flex-direction: column;
@@ -78,7 +87,8 @@ h1 {
     gap: 4px;
 }
 
-.main {
+/* The main section divs */
+.main1, .main2 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -86,11 +96,17 @@ h1 {
     margin-bottom: 20px;
 }
 
+.main1 {
+    align-items: center;
+}
+
+/* The secondary containers in main section */
 .container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 #current-list-title {
     display: flex;
     justify-content: space-between;
@@ -110,6 +126,7 @@ h1 {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    max-width: calc(100vw - 36px);
     flex: 1;
     border: 1px solid #333;
     background-color: #ccc;
@@ -123,6 +140,7 @@ input {
     font-size: 1rem;
 }
 
+/* Where user inputs the item to be added to the list */
 #item-to-add {
     background: #ddd;
     width: 75%;
@@ -136,24 +154,24 @@ input {
     width: 60%;
 }
 
+input::placeholder{
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Buttons */
 #save-list-button {
     color: white;
     background: none;
-    background-color: #444;
     border-radius: 6px;
     cursor: pointer;
     border: none;
     transition: 0.2s ease-in;
-    
 }
 
 #save-list-button:hover {
     color: rgb(66, 222, 19);
-}
-
-input::placeholder{
-    color: #888;
-    font-size: 0.8rem;
+    background-image: linear-gradient(#444, #666);
 }
 
 .remove-button,
@@ -171,9 +189,21 @@ input::placeholder{
     cursor: pointer;
 }
 
+.remove-icon {
+    position: absolute;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    transition: 0.2s ease-in-out;
+}
+
 .remove-button:hover,
 .add-button:hover {
    text-shadow: 2px 2px 4px #333; 
+}
+
+.remove-icon:hover {
+    box-shadow: 1px 3px 3px #333;
 }
 
 .add-button {
@@ -184,8 +214,21 @@ input::placeholder{
     cursor: pointer;
 }
 
-.saved-list-title:hover, .list-item:hover {
+.saved-list-title:hover,
+.list-item:hover {
     font-weight: 700;
+}
+
+.list-item {
+    word-wrap: break-word;
+    position: relative;
+    border-bottom: 1px solid #bbb;
+    text-decoration-color: green;
+}
+
+.list-item::marker {
+    color: #888;
+    font-size: 0.8rem;
 }
 
 #saved-lists-container {
@@ -198,6 +241,14 @@ input::placeholder{
 h2 {
     font-size: 1.2rem;
     padding-top: 10px;
+    margin: 0;
+}
+
+h3 {
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: 300;
+    padding-top: 2px;
     margin: 0;
 }
 

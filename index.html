@@ -12,8 +12,8 @@
     <!-- Javascript & JQuery source files -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <script src="./js/jquery-3.6.4.min.js"></script>
-        <script src="js/project1_group2.js" defer></script>
+        <script src="./js/jquery-3.6.4.min.js" defer></script>
+        <script src="js/project1-group2.js" defer></script>
 
     <!-- CSS -->
     <link rel="stylesheet" href="./css/dark_style.css" id="css-link">
@@ -46,9 +46,12 @@
 
     <main>
         <!-- Page Title -->
-        <h1>To-Do List</h1>
+        <div class="main1">
+            <h1>To-Do List</h1>
+            <p>Add items to your list, give your list a name and save it!<br>Click an item to mark/unmark as done.</p>
+        </div>
 
-        <div class="main">
+        <div class="main2">
             <div class="main-container">
                 <div class="container">
                     <div class="list-container" id="current-list-container">
@@ -56,7 +59,7 @@
                         <!-- Current list title and save to database button -->
                         <div class="list-title" id="current-list-title">
                             <label for="current-list-name">List name:</label>
-                            <input type="text" id="current-list-name" minlength="1" maxlength="100" name="current-list-name"
+                            <input type="text" id="current-list-name" minlength="1" maxlength="120" name="current-list-name"
                             title="Enter Custom List Name" placeholder="Unnamed List">
                             <input type="button" id="save-list-button" value="Save List" title="Click to add this list.">
                         </div>
@@ -64,23 +67,15 @@
                         <!-- Input field for item-to-be-added-to-current-list -->
                         <div class="add-container">
                             <label for="item-to-add">Item:</label>
-                            <input type="text" id="item-to-add" minlength="1" maxlength="100" spellcheck="true" name="item-to-add"
+                            <input type="text" id="item-to-add" minlength="1" maxlength="120" spellcheck="true" name="item-to-add"
                                 title="Enter the item to be added to the list."
                                 placeholder="Enter the item to be added here.">
-                            <input type="button" class="add-button" value="+" title="Click to add this item to the current list.">
+                            <input type="button" class="add-button" id="item-add-button" value="+" title="Click to add this item to the current list.">
                         </div>
                         
                         <!-- Display the current list as an ordered(numbered) list -->
                         <ol id="current-list">
                             <!-- Add the current item's lists as li elements with the remove button and green-strikethrough-on-click function -->
-                            <li class="list-item">Item 1555555555555555555555555testing size
-                                <input type="button"
-                                    class="remove-button" value="-" title="Remove this item from the list.">
-                            </li>
-                            <li class="list-item">Click me to mark me as done (strikethrough in green)
-                                <input type="button"
-                                    class="remove-button" value="-" title="Remove this item from the list.">
-                            </li>
                         </ol>
 
                     </div>
@@ -93,17 +88,10 @@
                 <div class="list-container" id="saved-lists-container">
                     <!-- Header in h2 -->
                     <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2>
+                    <h3>Click a list to display its contents.</h3>
 
                     <!-- UL with a list of all saved to-do lists -->
                     <ul id="list-of-saved-lists">
-                        <li class="saved-list-title">Saved List Title
-                            <input type="button" class="remove-button"
-                                value="-" title="Remove this item from the list.">
-                        </li>
-                        <li class="saved-list-title">Saved List Title
-                            <input type="button" class="remove-button"
-                                value="-" title="Remove this item from the list.">
-                        </li>
                     </ul>
                 </div>
             </div>
