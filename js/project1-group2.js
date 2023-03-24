@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let tasks = [];
     let savedLists = [];
-
+    let openedListIndex = -1;
 
     // Add task
     $(".add-button").click(function () {
@@ -13,21 +13,28 @@ $(document).ready(function () {
         }
     });
 
-
     // Save list
     $("#save-list-button").click(function () {
         let listName = $("#current-list-name").val().trim();
         if (listName.length === 0) {
             listName = "Unnamed List";
         }
-        savedLists.push({ name: listName, tasks: tasks.slice() });
+        if (openedListIndex === -1) {
+            // Save a new list
+            listName = getUniqueListName(listName);
+            savedLists.push({ name: listName, tasks: tasks.slice() });
+        } else {
+            // Update the opened list
+            listName = getUniqueListName(listName, openedListIndex);
+            savedLists[openedListIndex] = { name: listName, tasks: tasks.slice() };
+        }
         displaySavedLists();
         tasks = [];
         displayTasks();
         $("#current-list-name").val("");
+        openedListIndex = -1;
     });
-
-
+    
     // Display tasks
     function displayTasks() {
         $("#current-list").empty();
@@ -69,7 +76,28 @@ $(document).ready(function () {
         displayTasks();
     }
 
-
+    // Get unique list name
+    function getUniqueListName(name, excludeIndex) {
+        let baseName = name;
+        let counter = 1;
+        let unique = false;
+        while (!unique) {
+            unique = true;
+            for (let i = 0; i < savedLists.length; i++) {
+                if (i === excludeIndex) {
+                    continue;
+                }
+                if (savedLists[i].name === name) {
+                    unique = false;
+                    name = baseName + " (" + counter + ")";
+                    counter++;
+                    break;
+                }
+            }
+        }
+        return name;
+    }
+    
     // Display saved lists
     function displaySavedLists() {
         $("#list-of-saved-lists").empty();
@@ -80,6 +108,8 @@ $(document).ready(function () {
                 .click(function () {
                     tasks = list.tasks.slice();
                     displayTasks();
+                    openedListIndex = index;
+                    $("#current-list-name").val(list.name);
                 });
             let removeButton = $("<input>")
                 .attr("type", "button")
@@ -100,7 +130,31 @@ $(document).ready(function () {
         displaySavedLists();
     }
     
-});
+    // Delete all items in the current list
+    $("#delete-all-items-button").click(function () {
+    if (confirm("Are you sure you want to delete all items in the current list?")) {
+        deleteAllItems();
+        displayTasks();
+    }
+    });
+
+    // Delete all saved lists
+    $("#delete-all-lists-button").click(function() {
+    if (confirm("Are you sure you want to delete all saved lists?")) {
+        deleteAllLists();
+        displaySavedLists();
+    }
+    });
+
+
+    function deleteAllItems() {
+    tasks.length = 0;
+    }
+
+    function deleteAllLists() {
+    savedLists.length = 0;
+    }
+
 
 // Functions to allow using ENTER in input fields to complete the action:
     //List Name
@@ -141,5 +195,7 @@ function LightTheme() {
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     DarkTheme();
 }
+
+});
 
 
