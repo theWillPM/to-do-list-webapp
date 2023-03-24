@@ -16,7 +16,7 @@
         <script src="js/project1-group2.js" defer></script>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="./css/dark_style.css" id="css-link">
+    <link rel="stylesheet" href="./css/light_theme.css" id="css-link">
 </head>
 
 <body>
@@ -24,10 +24,17 @@
     <header>
         <nav class="nav">
             <!-- Group Logo -->
-            <img src="./img/dark-logo.png" alt="Group 2's logo" class="group-2-logo">
+            <img src="./img/logo.png" alt="Group 2's logo" class="group-2-logo">
 
             <!-- Menu -->
             <div class="menu">
+                <div class="theme-picker">
+                    <span class="small-text">Colour Scheme:</span>
+                    <div class="icon-container">
+                        <img class="theme-icon" id="dark-theme-icon" src="./img/dark-icon.png" onclick="DarkTheme()" alt="dark-theme-icon, a crescent moon." title="Dark Theme">
+                        <img class="theme-icon" id="light-theme-icon" src="./img/light-icon.png"onclick="LightTheme()" alt="light-theme-icon, a shining sun." title="Light Theme">
+                    </div>
+                </div>
                 <div class="user-access">
                     <div class="user-input" id="username">
                         <label for="username-input">Username</label>
