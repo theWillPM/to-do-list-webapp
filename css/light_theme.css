@@ -61,7 +61,8 @@ nav {
 .theme-icon {
     height: 20px;
     width: 20px;
-    transition: 0.4s ease-in;border-radius: 50%;
+    transition: 0.4s ease-in;
+    border-radius: 50%;
 }
 
 .theme-icon:hover {
@@ -72,6 +73,7 @@ nav {
     color: var(--background);
     font-size: 0.6rem;
 }
+
 .user-access {
     color: var(--full-contrast);
     display: flex;
@@ -114,7 +116,7 @@ main {
 /* Page-title */
 h1 {
     color: var(--full-contrast);
-    text-shadow:  var(--main) 2px 0 10px;
+    text-shadow: var(--main) 2px 0 10px;
     font-size: 1.8rem;
     margin: 10px 0 0;
 }
@@ -136,7 +138,8 @@ h1 {
 }
 
 /* The main section divs */
-.main1, .main2 {
+.main1,
+.main2 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -195,14 +198,15 @@ input {
     width: 75%;
 }
 
-#current-list-name, #current-list-name:focus{
+#current-list-name,
+#current-list-name:focus {
     color: var(--small-contrast);
     background-color: var(--background-contrast);
     outline: none;
     width: 60%;
 }
 
-input::placeholder{
+input::placeholder {
     color: var(--placeholder);
     font-size: 0.8rem;
 }
@@ -247,7 +251,7 @@ input::placeholder{
 
 .remove-button:hover,
 .add-button:hover {
-   text-shadow: 2px 2px 4px var(--main); 
+    text-shadow: 2px 2px 4px var(--main);
 }
 
 .remove-icon:hover {
@@ -257,6 +261,7 @@ input::placeholder{
 .add-button {
     color: rgb(20, 150, 0);
 }
+
 #delete-all-items-button,
 #delete-all-lists-button {
     font-size: 0.8rem;
@@ -338,24 +343,24 @@ footer {
     right: 0;
     height: 40px;
     background-color: var(--main);
-  }
-  
-  .footer-p {
+}
+
+.footer-p {
     margin: 10px 0px 0px;
     padding-bottom: 4px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      color: var(--full-contrast);
-      text-align: center;
-  }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--full-contrast);
+    text-align: center;
+}
 
-  .footer-p>span{
+.footer-p>span {
     font-size: 0.8rem;
 
-  }
+}
 
-  .footer-container {
+.footer-container {
     margin: auto auto;
     display: flex;
     flex-direction: row;
