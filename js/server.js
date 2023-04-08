@@ -25,7 +25,7 @@ async function setupConnection() {
     console.log('Connected to database!');
     connection.query('CREATE DATABASE IF NOT EXISTS todo_list;');
     connection.query('USE todo_list;');
-    connection.query('CREATE TABLE `tasks` (`task_id` int NOT NULL AUTO_INCREMENT, `task` varchar(45) DEFAULT NULL, `status` varchar(45) DEFAULT NULL, PRIMARY KEY (`task_id`))');
+    connection.query('CREATE TABLE IF NOT EXISTS `tasks` (`task_id` int NOT NULL AUTO_INCREMENT, `task` varchar(45) DEFAULT NULL, `status` varchar(45) DEFAULT NULL, PRIMARY KEY (`task_id`))');
     return connection;
   } catch (error) {
     console.error('Error connecting to database:', error);
