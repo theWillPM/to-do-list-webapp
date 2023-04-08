@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:52331',
+  origin: 'http://localhost:52330',
   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept'
 }));
 
@@ -19,10 +19,13 @@ async function setupConnection() {
     const connection = await mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: '01251999',
-      database: 'todo_list'
+      password: '4ppl3s33d*',
+      database: 'sys'
     });
     console.log('Connected to database!');
+    connection.query('CREATE DATABASE IF NOT EXISTS todo_list;');
+    connection.query('USE todo_list;');
+    connection.query('CREATE TABLE `tasks` (`task_id` int NOT NULL AUTO_INCREMENT, `task` varchar(45) DEFAULT NULL, `status` varchar(45) DEFAULT NULL, PRIMARY KEY (`task_id`))');
     return connection;
   } catch (error) {
     console.error('Error connecting to database:', error);
