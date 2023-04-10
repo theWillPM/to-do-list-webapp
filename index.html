@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Web Development Project Phase 1">
+    <meta name="description" content="Web Development Project Phase 2">
     <meta name="author" content="Group 2">
     <meta name="viewport" content="width=device-width,  initial-scale=1.0">
     <title>To-Do WebApp</title>
@@ -43,7 +43,7 @@
         <!-- Page Title -->
         <div class="main1">
             <h1>To-Do List</h1>
-            <p>Click a Task to mark/unmark as done.</p>
+            <p>Add tasks to your list!</p>
         </div>
 
         <div class="main2">
@@ -52,23 +52,43 @@
                     <div class="list-container" id="current-list-container">
 
                         <!-- Current list title and save to database button -->
-                        <div class="list-title" id="current-list-title">
-                            <label for="current-list-name">Task</label>
-                        </div>
+                        <!-- <div class="list-title" id="current-list-title"> -->
+                            <!-- <label for="current-list-name">List name:</label> -->
+                            <!-- <input type="text" id="current-list-name" minlength="1" maxlength="120" -->
+                                <!-- name="current-list-name" title="Enter Custom List Name" placeholder="Unnamed List"> -->
+                            <!-- <input type="button" id="save-list-button" value="Save List" -->
+                                <!-- title="Click to add this list."> -->
+                        <!-- </div> -->
                         
-                        <!-- Input field for item-to-be-added-to-current-list -->
+                        <!-- Input field for task-to-be-added-to-current-list -->
                         <div class="add-container">
-                            <input type="text" id="item-to-add" minlength="1" maxlength="120" spellcheck="true" name="item-to-add"
+                            <input type="text" id="task-to-add" minlength="1" maxlength="120" spellcheck="true" name="task-to-add"
                                 title="Enter the task to be added to the list."
-                                placeholder="Enter the task to be added here.">
-                            <input type="button" class="add-button" id="item-add-button" value="+" title="Click to add this item to the current list.">
+                                placeholder="Enter the task to be added here. Hit ENTER or click the green + button.">
+                            <input type="button" class="add-button" id="task-add-button" value="+" title="Click to add this task to the current list.">
                         </div>
-                        
+                        <span class="small-instructions">Click a task to mark/unmark as done.</span>
                         <!-- Display the current list as an ordered(numbered) list -->
                         <ol id="current-list">
-                            <!-- Add the current item's lists as li elements with the remove button and green-strikethrough-on-click function -->
+                            <!-- Add the current task's lists as li elements with the remove button and green-strikethrough-on-click function -->
                         </ol>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Second main-container, with the saved lists 
+        LISTS FUNCTIONALITY DISABLED FOR PRESENTATION -->
+        <!-- <div class="main-container"> -->
+
+            <!-- <div class="list-container" id="saved-lists-container"> -->
+                <!-- Header in h2 -->
+                <!-- <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2> -->
+                <!-- <h3>Click a list to display its contents.</h3> -->
+
+                <!-- UL with a list of all saved to-do lists -->
+                <!-- <ul id="list-of-saved-lists"> -->
+                <!-- </ul> -->
+
             </div>
     </main>
 
