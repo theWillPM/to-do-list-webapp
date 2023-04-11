@@ -206,7 +206,7 @@ app.get('/null/tasks', async (req, res) => {
     try {
       const task = req.body.task;
       const status = req.body.status;
-      const list = req.body.list;
+      const list = req.body.list_id;
       // const uniqueTaskName = await getUniqueTaskName(task, connection);
   
       const [insertResult] = await connection.query('INSERT INTO tasks (task, status, list_id) VALUES (?, ?, ?); SELECT LAST_INSERT_ID() as task_id', [task, status, list]);

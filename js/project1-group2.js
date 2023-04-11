@@ -41,11 +41,13 @@ $(document).ready(function () {
         console.error(`Error removing list '${savedLists[index].list}':`, error);
       },
     });
+
+    // We used to fetch all tasks that belonged to list_id = null. Not the case anymore. Just using for real-time visualization.
     $.ajax({
       url: `http://localhost:3000/lists/null/tasks`,
       type: 'GET',
       success: function (response) {
-        if (response.length > 0) {
+        if (response) {
           console.log('New list');
           tasks = [];
           displayTasks();
@@ -107,7 +109,7 @@ $(document).ready(function () {
         data: JSON.stringify({ task: uniqueTaskName, status: 'ongoing', list_id: list }),
         contentType: 'application/json;  charset=utf-8',
         success: function (response) {
-          if (response.message) {
+          if (response) {
             addTask(uniqueTaskName, response.task_id, savedLists);
             $("#task-to-add").val("");
           } else {
