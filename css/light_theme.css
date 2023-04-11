@@ -222,8 +222,13 @@ input::placeholder {
     font-size: 0.8rem;
 }
 
+#current-list-label {
+    width: 10%;
+}
 /* Buttons */
-#save-list-button {
+#save-list-button,
+#new-list-button {
+    width: 10%;
     color: var(--full-contrast);
     background: none;
     border-radius: 6px;
@@ -233,7 +238,8 @@ input::placeholder {
     background-image: linear-gradient(var(--small-contrast), #666);
 }
 
-#save-list-button:hover {
+#save-list-button:hover,
+#new-list-button:hover {
     color: rgb(66, 222, 19);
 }
 
