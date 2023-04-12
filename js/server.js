@@ -14,6 +14,32 @@ const app = express();
 const port = 3000;              // the server will be listening on this port
 const localhost = 52330;        // localhost port you used to 'go live' (client-side)
 
+
+// Function to add time-stamp to our console log:
+// Based on the solution by Mr. leszek.hanusz (Stack Overflow)
+// https://stackoverflow.com/a/36887315/21407662
+var log = console.log;
+console.log = function () {
+    var first_parameter = arguments[0];
+    var other_parameters = Array.prototype.slice.call(arguments, 1);
+
+    function formatConsoleDate (date) {
+        var hour = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+
+        return '[' +
+               ((hour < 10) ? '0' + hour: hour) +
+               ':' +
+               ((minutes < 10) ? '0' + minutes: minutes) +
+               ':' +
+               ((seconds < 10) ? '0' + seconds: seconds) +
+               '] ';
+    }
+
+    log.apply(console, [formatConsoleDate(new Date()) + first_parameter].concat(other_parameters));
+};
+
 // Allow http requests connection on localhost
 app.use(cors({
   origin: `http://localhost:${localhost}`, 
@@ -83,6 +109,7 @@ async function fetchSavedLists(connection) {
   return Object.values(groupedLists);
 }
 
+/* DEPRECATED - leaving here for future reference.
 async function getUniqueTaskName(name, connection) {
   let baseName = name;
   let counter = 1;
@@ -100,8 +127,6 @@ async function getUniqueTaskName(name, connection) {
   }
   return name;
 }
-
-/* DEPRECATED - leaving here for future reference.
 async function getUniqueListName(name, connection) {
   let baseName = name;
   let counter = 1;
@@ -125,6 +150,7 @@ async function getUniqueListName(name, connection) {
   app.get('/saved-lists', async (req, res) => {
     try {
       const savedLists = await fetchSavedLists(connection);
+      console.log("Fetched saved lists." + savedLists)
       res.status(200).json(savedLists);
     } catch (error) {
       console.error(error);
@@ -147,6 +173,7 @@ async function getUniqueListName(name, connection) {
   app.get('/lists', async (req, res) => {
     try {
       const [rows, fields] = await connection.query('SELECT * FROM lists');
+      console.log("Displaying all lists from database -> OK.")
       res.json(rows);
     } catch (error) {
       console.error(error);
@@ -178,6 +205,7 @@ app.get('/lists/:id/tasks', async (req, res) => {
     const listId = req.params.id;
     if (listId != "null") {
       [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id = ?', [listId]);
+      console.log(`Displaying tasks from list_id = ${listId}`);
     }
     else {
       [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id IS NULL', [listId]);
@@ -193,6 +221,7 @@ app.get('/lists/:id/tasks', async (req, res) => {
 app.get('/null/tasks', async (req, res) => {
   try {
     [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id IS NULL', [listId]);
+    console.log(`Displaying tasks from list_id = null`);
     res.json(rows);
   } catch (error) {
     console.error(error);
@@ -212,7 +241,7 @@ app.get('/null/tasks', async (req, res) => {
       const [insertResult] = await connection.query('INSERT INTO tasks (task, status, list_id) VALUES (?, ?, ?); SELECT LAST_INSERT_ID() as task_id', [task, status, list]);
       const task_id = insertResult[1][0].task_id;
       const savedLists = await fetchSavedLists(connection);
-
+      console.log(`Added task [${task}] to list_id = [${list}] `)
       res.status(200).json({ message: 'Task added to database!', savedLists, task_id });
     } catch (error) {
       console.error(error);
@@ -220,6 +249,7 @@ app.get('/null/tasks', async (req, res) => {
     }
   });
 
+  // Insert list
   app.post('/lists', async (req, res) => {
     try {
       const list = req.body.list;
@@ -228,15 +258,17 @@ app.get('/null/tasks', async (req, res) => {
       const list_id = insertResult[1][0].list_id;
   
       await connection.query(`UPDATE todo_list.tasks SET list_id = ? WHERE list_id IS NULL`, [list_id]);
-  
-      const savedLists = await fetchSavedLists(connection);
-      res.status(200).json({ message: 'List added to database!', savedLists });
+      
+      console.log(`Saved list id=[${list_id}] to database.`);
+      // const savedLists = await fetchSavedLists(connection);
+      res.status(200).json({ message: 'List added to database!' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Error adding list to database!' });
     }
   });
 
+  // Overwrite existing list (rename)
   app.post('/lists/overwrite', async (req, res) => {
     try {
       const list = req.body.list;
@@ -245,6 +277,7 @@ app.get('/null/tasks', async (req, res) => {
       const updated = await connection.query(`UPDATE todo_list.lists SET list = ? WHERE list_id = ?;`, [list, list_id]);
   
       const savedLists = await fetchSavedLists(connection);
+      console.log(`Renamed list id=[${list_id}] to ${list}`)
       res.status(200).json({ message: 'List updated!', updated });
     } catch (error) {
       console.error(error);
@@ -267,7 +300,8 @@ app.get('/null/tasks', async (req, res) => {
     try {
       const [result] = await connection.execute(
         'UPDATE tasks SET status = ? WHERE task_id = ?',
-        [status, taskId]
+        [status, taskId],
+        console.log(`Updated task(id=[${taskId}]) -> new status = [${status}]`)
       );
   
       if (result.affectedRows === 0) {
@@ -287,7 +321,8 @@ app.get('/null/tasks', async (req, res) => {
     try {
       const taskId = req.params.id;
       await connection.query('DELETE FROM tasks WHERE task_id = ?', [taskId]);
-      await fetchSavedLists(connection);
+      // await fetchSavedLists(connection);
+      console.log(`Deleted task id=[${taskId}]`);
       res.status(200).json({ message: 'Task removed from database!' });
     } catch (error) {
       console.error(error);
@@ -304,10 +339,13 @@ app.get('/null/tasks', async (req, res) => {
       }
       if (listId == "null") {
       await connection.query(`DELETE FROM tasks WHERE list_id IS NULL`);
+      console.log("Deleted all tasks from 'null' List"); 
       }
       else {
-      await connection.query(`DELETE FROM lists WHERE list_id = ?`, [listId]);
+        await connection.query(`DELETE FROM lists WHERE list_id = ?`, [listId]);
+        console.log(`Deleted List id=[${listId}]`); 
       await connection.query(`DELETE FROM tasks WHERE list_id = ?`, [listId]);
+      console.log(`Deleted all tasks from List id=[${listId}]`); 
       }
       await fetchSavedLists(connection);
       res.status(200).json({ message: 'List removed from database!' });
