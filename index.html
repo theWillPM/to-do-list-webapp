@@ -35,18 +35,6 @@
                         <img class="theme-icon" id="light-theme-icon" src="./img/light-icon.png"onclick="LightTheme()" alt="light-theme-icon, a shining sun." title="Light Theme">
                     </div>
                 </div>
-                <div class="user-access">
-                    <div class="user-input" id="username">
-                        <label for="username-input">Username</label>
-                        <input type="text" id="username-input" minlength="6" maxlength="32" name="username-input"
-                        title="username" placeholder="placeholder-for-phase-two">
-                    </div>
-                    <div class="user-input" id="password">
-                        <label for="password-input">Password</label>
-                        <input type="password" id="password-input" minlength="4" maxlength="32" name="password-input"
-                        title="password" placeholder="placeholder-for-phase-two">
-                    </div>
-                </div>
             </div>
         </nav>
     </header>
@@ -55,7 +43,7 @@
         <!-- Page Title -->
         <div class="main1">
             <h1>To-Do List</h1>
-            <p>Add items to your list, give your list a name and save it!<br>Click an item to mark/unmark as done.</p>
+            <p>Add tasks to your list, give your list a name and save it!</p>
         </div>
 
         <div class="main2">
@@ -65,47 +53,44 @@
 
                         <!-- Current list title and save to database button -->
                         <div class="list-title" id="current-list-title">
-                            <label for="current-list-name">List name:</label>
-                            <input type="text" id="current-list-name" minlength="1" maxlength="120" name="current-list-name"
-                            title="Enter Custom List Name" placeholder="Unnamed List">
-                            <input type="button" id="save-list-button" value="Save List" title="Click to add this list.">
+                            <label for="current-list-name" id="current-list-label">List name:</label>
+                            <input type="text" id="current-list-name" minlength="1" maxlength="120"
+                                name="current-list-name" title="Enter Custom List Name" placeholder="Unnamed List">
+                            <input type="button" id="save-list-button" value="Save List"
+                                title="Click to add this list.">
+                            <input type="button" id="new-list-button" value="New List"
+                                title="Click to start a new list.">
                         </div>
                         
-                        <!-- Input field for item-to-be-added-to-current-list -->
+                        <!-- Input field for task-to-be-added-to-current-list -->
                         <div class="add-container">
-                            <label for="item-to-add">Item:</label>
-                            <input type="text" id="item-to-add" minlength="1" maxlength="120" spellcheck="true" name="item-to-add"
-                                title="Enter the item to be added to the list."
-                                placeholder="Enter the item to be added here.">
-                            <input type="button" class="add-button" id="item-add-button" value="+" title="Click to add this item to the current list.">
+                            <input type="text" id="task-to-add" minlength="1" maxlength="120" spellcheck="true" name="task-to-add"
+                                title="Enter the task to be added to the list."
+                                placeholder="Enter the task to be added here.">
+                            <input type="button" class="add-button" id="task-add-button" value="+" title="Click to add this task to the current list.">
+                            <h3>Click a task to mark/unmark as done.</h3>
                         </div>
                         
                         <!-- Display the current list as an ordered(numbered) list -->
                         <ol id="current-list">
-                            <!-- Add the current item's lists as li elements with the remove button and green-strikethrough-on-click function -->
+                            <!-- Add the current task's lists as li elements with the remove button and green-strikethrough-on-click function -->
                         </ol>
-                        <input type="button" id="delete-all-items-button" value="Delete All Items" title="Click to delete all items in the current list.">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Second main-container, with the saved lists-->
-            <div class="main-container">
-                
-                <div class="list-container" id="saved-lists-container">
-                    <!-- Header in h2 -->
-                    <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2>
-                    <h3>Click a list to display its contents.</h3>
-                    
-                    <!-- UL with a list of all saved to-do lists -->
-                    <ul id="list-of-saved-lists">
-                    </ul>
-                    <input type="button" id="delete-all-lists-button" value="Delete All Lists" title="Click to delete all saved lists.">
-
                 </div>
             </div>
         </div>
+            <!-- Second main-container, with the saved lists-->
+        <div class="main-container">
 
+            <div class="list-container" id="saved-lists-container">
+                <!-- Header in h2 -->
+                <h2 class="list-title" id="saved-list-container-title">Saved Lists</h2>
+                <h3>Click a list to display its contents.</h3>
+
+                <!-- UL with a list of all saved to-do lists -->
+                <ul id="list-of-saved-lists">
+                </ul>
+
+            </div>
     </main>
 
     <!-- Footer with copyright -->
