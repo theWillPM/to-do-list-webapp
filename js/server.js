@@ -20,29 +20,29 @@ const localhost = 52330;        // localhost port you used to 'go live' (client-
 // https://stackoverflow.com/a/36887315/21407662
 var log = console.log;
 console.log = function () {
-    var first_parameter = arguments[0];
-    var other_parameters = Array.prototype.slice.call(arguments, 1);
+  var first_parameter = arguments[0];
+  var other_parameters = Array.prototype.slice.call(arguments, 1);
 
-    function formatConsoleDate (date) {
-        var hour = date.getHours();
-        var minutes = date.getMinutes();
-        var seconds = date.getSeconds();
+  function formatConsoleDate(date) {
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
 
-        return '[' +
-               ((hour < 10) ? '0' + hour: hour) +
-               ':' +
-               ((minutes < 10) ? '0' + minutes: minutes) +
-               ':' +
-               ((seconds < 10) ? '0' + seconds: seconds) +
-               '] ';
-    }
+    return '[' +
+      ((hour < 10) ? '0' + hour : hour) +
+      ':' +
+      ((minutes < 10) ? '0' + minutes : minutes) +
+      ':' +
+      ((seconds < 10) ? '0' + seconds : seconds) +
+      '] ';
+  }
 
-    log.apply(console, [formatConsoleDate(new Date()) + first_parameter].concat(other_parameters));
+  log.apply(console, [formatConsoleDate(new Date()) + first_parameter].concat(other_parameters));
 };
 
-// Allow http requests connection on localhost
+// Allow http requests from localhost
 app.use(cors({
-  origin: `http://localhost:${localhost}`, 
+  origin: `http://localhost:${localhost}`,
   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept'
 }));
 
@@ -50,7 +50,7 @@ app.use(cors({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Defining the sett-up our connection and executing essential queries:
+// Setting-up our connection and executing essential queries:
 let connection;
 async function setupConnection() {
   try {
@@ -109,79 +109,43 @@ async function fetchSavedLists(connection) {
   return Object.values(groupedLists);
 }
 
-/* DEPRECATED - leaving here for future reference.
-async function getUniqueTaskName(name, connection) {
-  let baseName = name;
-  let counter = 1;
-  let unique = false;
-
-  while (!unique) {
-    unique = true;
-    const [rows] = await connection.query('SELECT * FROM tasks WHERE task = ?', [name]);
-
-    if (rows.length > 0) {
-      unique = false;
-      name = baseName + " (" + counter + ")";
-      counter++;
-    }
-  }
-  return name;
-}
-async function getUniqueListName(name, connection) {
-  let baseName = name;
-  let counter = 1;
-  let unique = false;
-
-  while (!unique) {
-    unique = true;
-    const [rows] = await connection.query('SELECT * FROM lists WHERE list = ?', [name]);
-
-    if (rows.length > 0) {
-      unique = false;
-      name = baseName + " (" + counter + ")";
-      counter++;
-    }
-  }
-  return name;
-} */
-
 /* SELECT queries */
-  // select tasks and list
-  app.get('/saved-lists', async (req, res) => {
-    try {
-      const savedLists = await fetchSavedLists(connection);
-      console.log("Fetched saved lists." + savedLists)
-      res.status(200).json(savedLists);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error fetching saved lists and tasks' });
-    }
-  });  
+// select tasks and list
+app.get('/saved-lists', async (req, res) => {
+  try {
+    const savedLists = await fetchSavedLists(connection);
+    console.log("Fetched saved lists." + savedLists)
+    res.status(200).json(savedLists);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching saved lists and tasks' });
+  }
+});
 
-  // Select all tasks
-  app.get('/tasks', async (req, res) => {
-    try {
-      const [rows, fields] = await connection.query('SELECT * FROM tasks');
-      res.json(rows);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error getting tasks from database!' });
-    }
-  });
+// Select all tasks
+app.get('/tasks', async (req, res) => {
+  try {
+    const [rows, fields] = await connection.query('SELECT * FROM tasks');
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error getting tasks from database!' });
+  }
+});
 
-  // Select all list
-  app.get('/lists', async (req, res) => {
-    try {
-      const [rows, fields] = await connection.query('SELECT * FROM lists');
-      console.log("Displaying all lists from database -> OK.")
-      res.json(rows);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error getting lists from database!' });
-    }
-  });
+// Select all list (this is the most commonly used method)
+app.get('/lists', async (req, res) => {
+  try {
+    const [rows, fields] = await connection.query('SELECT * FROM lists');
+    console.log("Displaying all lists from database -> OK.")
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error getting lists from database!' });
+  }
+});
 
-  // Select list name by ID
+// Select list name by ID
 app.get('/lists/:id', async (req, res) => {
   try {
     const listId = req.params.id;
@@ -190,6 +154,7 @@ app.get('/lists/:id', async (req, res) => {
       res.json(rows[0].list);
     }
     else {
+      // if list is null, select tasks instead
       [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id IS NULL');
       res.json(rows);
     }
@@ -208,6 +173,7 @@ app.get('/lists/:id/tasks', async (req, res) => {
       console.log(`Displaying tasks from list_id = ${listId}`);
     }
     else {
+      // different query to be able to display tasks from list_id = null, as MySQL doesn't allow "list_id = null" on queries.
       [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id IS NULL', [listId]);
     }
 
@@ -218,6 +184,7 @@ app.get('/lists/:id/tasks', async (req, res) => {
   }
 });
 
+// specific Get for new lists:
 app.get('/null/tasks', async (req, res) => {
   try {
     [rows, fields] = await connection.query('SELECT * FROM tasks WHERE list_id IS NULL', [listId]);
@@ -230,132 +197,130 @@ app.get('/null/tasks', async (req, res) => {
 });
 
 /* INSERT queries */
-  // Insert task
-  app.post('/tasks', async (req, res) => {
-    try {
-      const task = req.body.task;
-      const status = req.body.status;
-      const list = req.body.list_id;
-      // const uniqueTaskName = await getUniqueTaskName(task, connection);
-  
-      const [insertResult] = await connection.query('INSERT INTO tasks (task, status, list_id) VALUES (?, ?, ?); SELECT LAST_INSERT_ID() as task_id', [task, status, list]);
-      const task_id = insertResult[1][0].task_id;
-      const savedLists = await fetchSavedLists(connection);
-      console.log(`Added task [${task}] to list_id = [${list}] `)
-      res.status(200).json({ message: 'Task added to database!', savedLists, task_id });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error adding task to database!' });
-    }
-  });
+// Insert task
+app.post('/tasks', async (req, res) => {
+  try {
+    const task = req.body.task;
+    const status = req.body.status;
+    const list = req.body.list_id;
 
-  // Insert list
-  app.post('/lists', async (req, res) => {
-    try {
-      const list = req.body.list;
+    const [insertResult] = await connection.query('INSERT INTO tasks (task, status, list_id) VALUES (?, ?, ?); SELECT LAST_INSERT_ID() as task_id', [task, status, list]);
+    const task_id = insertResult[1][0].task_id;
+    const savedLists = await fetchSavedLists(connection);
+    console.log(`Added task [${task}] to list_id = [${list}] `)
+    // returns the list of savedLists and the newly saved task's task_id
+    res.status(200).json({ message: 'Task added to database!', savedLists, task_id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error adding task to database!' });
+  }
+});
 
-      const [insertResult] = await connection.query(`INSERT INTO lists(list) VALUES (?); SELECT LAST_INSERT_ID() AS list_id;`, [list]);
-      const list_id = insertResult[1][0].list_id;
-  
-      await connection.query(`UPDATE todo_list.tasks SET list_id = ? WHERE list_id IS NULL`, [list_id]);
-      
-      console.log(`Saved list id=[${list_id}] to database.`);
-      // const savedLists = await fetchSavedLists(connection);
-      res.status(200).json({ message: 'List added to database!' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error adding list to database!' });
-    }
-  });
+// Insert list
+app.post('/lists', async (req, res) => {
+  try {
+    const list = req.body.list;
 
-  // Overwrite existing list (rename)
-  app.post('/lists/overwrite', async (req, res) => {
-    try {
-      const list = req.body.list;
-      const list_id = req.body.list_id;
+    const [insertResult] = await connection.query(`INSERT INTO lists(list) VALUES (?); SELECT LAST_INSERT_ID() AS list_id;`, [list]);
+    const list_id = insertResult[1][0].list_id;
 
-      const updated = await connection.query(`UPDATE todo_list.lists SET list = ? WHERE list_id = ?;`, [list, list_id]);
-  
-      const savedLists = await fetchSavedLists(connection);
-      console.log(`Renamed list id=[${list_id}] to ${list}`)
-      res.status(200).json({ message: 'List updated!', updated });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error updating list on database!' });
-    }
-  });
+    await connection.query(`UPDATE todo_list.tasks SET list_id = ? WHERE list_id IS NULL`, [list_id]);
 
-  
+    console.log(`Saved list id=[${list_id}] to database.`);
+    res.status(200).json({ message: 'List added to database!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error adding list to database!' });
+  }
+});
+
+// Overwrite existing list (rename)
+app.post('/lists/overwrite', async (req, res) => {
+  try {
+    const list = req.body.list;
+    const list_id = req.body.list_id;
+
+    const updated = await connection.query(`UPDATE todo_list.lists SET list = ? WHERE list_id = ?;`, [list, list_id]);
+
+    const savedLists = await fetchSavedLists(connection);
+    console.log(`Renamed list id=[${list_id}] to ${list}`)
+    res.status(200).json({ message: 'List updated!', updated });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error updating list on database!' });
+  }
+});
+
+
 
 /* UPDATE queries */
-  // Change task status
-  app.put('/tasks/:taskId', async (req, res) => {
-    const taskId = req.params.taskId;
-    const status = req.body.status;
-  
-    if (!taskId || !status) {
-      return res.status(400).json({ error: 'taskId and status are required' });
+// Change task status
+app.put('/tasks/:taskId', async (req, res) => {
+  const taskId = req.params.taskId;
+  const status = req.body.status;
+
+  if (!taskId || !status) {
+    return res.status(400).json({ error: 'taskId and status are required' });
+  }
+
+  try {
+    const [result] = await connection.execute(
+      'UPDATE tasks SET status = ? WHERE task_id = ?',
+      [status, taskId],
+      console.log(`Updated task(id=[${taskId}]) -> new status = [${status}]`)
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Task not found' });
     }
-  
-    try {
-      const [result] = await connection.execute(
-        'UPDATE tasks SET status = ? WHERE task_id = ?',
-        [status, taskId],
-        console.log(`Updated task(id=[${taskId}]) -> new status = [${status}]`)
-      );
-  
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Task not found' });
-      }
-  
-      res.json({ message: 'Task updated successfully.' });
-    } catch (error) {
-      console.error(`Error updating task: ${error.message}`);
-      res.status(500).json({ error: 'An error occurred while updating the task.' });
-    }
-  });
+
+    res.json({ message: 'Task updated successfully.' });
+  } catch (error) {
+    console.error(`Error updating task: ${error.message}`);
+    res.status(500).json({ error: 'An error occurred while updating the task.' });
+  }
+});
 
 /* DELETE queries */
-  // Delete task
-  app.delete('/tasks/:id', async (req, res) => {
-    try {
-      const taskId = req.params.id;
-      await connection.query('DELETE FROM tasks WHERE task_id = ?', [taskId]);
-      // await fetchSavedLists(connection);
-      console.log(`Deleted task id=[${taskId}]`);
-      res.status(200).json({ message: 'Task removed from database!' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error removing task from database!' });
+// Delete task
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    await connection.query('DELETE FROM tasks WHERE task_id = ?', [taskId]);
+    console.log(`Deleted task id=[${taskId}]`);
+    res.status(200).json({ message: 'Task removed from database!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error removing task from database!' });
+  }
+});
+
+// Delete list and all tasks from that list (also deleting from null list to start a new list)
+app.delete('/lists/:id', async (req, res) => {
+  try {
+    let listId = req.params.id;
+    if (typeof listId === 'undefined') {
+      return res.status(400).json({ error: 'Missing list_id parameter' });
     }
-  });
-  
-  // Delete list
-  app.delete('/lists/:id', async (req, res) => {
-    try {
-      let listId = req.params.id;
-      if (typeof listId === 'undefined') {
-        return res.status(400).json({ error: 'Missing list_id parameter' });
-      }
-      if (listId == "null") {
+    if (listId == "null") {
       await connection.query(`DELETE FROM tasks WHERE list_id IS NULL`);
-      console.log("Deleted all tasks from 'null' List"); 
-      }
-      else {
-        await connection.query(`DELETE FROM lists WHERE list_id = ?`, [listId]);
-        console.log(`Deleted List id=[${listId}]`); 
-      await connection.query(`DELETE FROM tasks WHERE list_id = ?`, [listId]);
-      console.log(`Deleted all tasks from List id=[${listId}]`); 
-      }
-      await fetchSavedLists(connection);
-      res.status(200).json({ message: 'List removed from database!' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error removing List from database!' });
+      console.log("Deleted all tasks from 'null' List");
     }
-  });
-  
-/* Server Status */  
+    else {
+      await connection.query(`DELETE FROM lists WHERE list_id = ?`, [listId]);
+      console.log(`Deleted List id=[${listId}]`);
+      await connection.query(`DELETE FROM tasks WHERE list_id = ?`, [listId]);
+      console.log(`Deleted all tasks from List id=[${listId}]`);
+    }
+    await fetchSavedLists(connection);
+    res.status(200).json({ message: 'List removed from database!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error removing List from database!' });
+  }
+});
+
+/* Server Status */
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

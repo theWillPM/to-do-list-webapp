@@ -12,7 +12,7 @@ $(document).ready(function () {
   tasks = [];
 
 
-  // Add task
+  // Add task. Checks for name duplicates and adds tasks to the proper selected list, or null if none.
   function addTask(taskName, id, savedLists) {
     const uniqueName = getUniqueTaskName(taskName, tasks);
     if (openedListIndex != -1)
@@ -22,7 +22,7 @@ $(document).ready(function () {
     displayTasks();
   }
 
-  // Start new list
+  // Starts a new list. Deletes all tasks that currently belong to list_id = null, clears input fields.
   async function newList() {
     $("#task-to-add").val("");
     $("#current-list-name").val("");
@@ -68,6 +68,7 @@ $(document).ready(function () {
     newList();
   });
 
+  // function to check if the current list already has a task with that name. Uses a counter inside parenthesis format for duplicates.
   function getUniqueTaskName(name, tasks) {
     let baseName = name;
     let counter = 1;
@@ -92,7 +93,8 @@ $(document).ready(function () {
     return name;
   }
 
-
+// function called by clicking the task add-button.
+// obtains task name from input field.
   $(".add-button").click(function () {
     let task = $("#task-to-add").val().trim();
     if (task.length > 0) {
@@ -101,8 +103,8 @@ $(document).ready(function () {
       if (openedListIndex != -1) {
         list = savedLists[openedListIndex].list_id;
       }
-
       $("#task-to-add").val("");
+      // the asynchronous function for the POST request (add task):
       $.ajax({
         url: 'http://localhost:3000/tasks',
         type: 'POST',
@@ -123,6 +125,7 @@ $(document).ready(function () {
     }
   });
 
+  // function to obtain tasks of the current list
   function getTasks() {
     let listId;
     if (openedListIndex != -1)
@@ -130,7 +133,8 @@ $(document).ready(function () {
     else
       listId = 'null';
     $("#current-list").empty();
-    
+
+    // GET request to fetch tasks from current list
       $.ajax({
         url: `http://localhost:3000/lists/${listId}/tasks`,
         type: 'GET',
@@ -153,6 +157,8 @@ $(document).ready(function () {
   // Remove task
   function removeTask(index) {
     const taskId = tasks[index].task_id;
+
+    // DELETE request to delete task from database
     $.ajax({
       url: `http://localhost:3000/tasks/${taskId}`,
       type: 'DELETE',
@@ -174,6 +180,7 @@ $(document).ready(function () {
     const taskId = tasks[index].task_id;
     const newStatus = tasks[index].status === 'ongoing' ? 'complete' : 'ongoing';
 
+    // PUT request to change a task's status on the database
     $.ajax({
       url: `http://localhost:3000/tasks/${taskId}`,
       type: 'PUT',
@@ -194,7 +201,7 @@ $(document).ready(function () {
     });
   }
 
-
+  // Sends request to save list on the database and pushes it to savedLists array.
   function saveList(listName, openedListIndex, savedLists) {
     if (listName === "") {
       alert("Please enter a name for the list.");
@@ -202,10 +209,9 @@ $(document).ready(function () {
     }
     // checks our savedLists to see if there's already another list with this name
     if (openedListIndex != -1) {
-      excludeIndex = openedListIndex;                                                 /* We need to pass the list_id here! 
-                                                                                      (if you replace with a number, it works.)*/
       data = { list: listName, tasks: tasks, list_id: savedLists[openedListIndex].list_id };
-   
+      
+      //if we are editing an existing list, overwrite it:
       $.ajax({
         url: "http://localhost:3000/lists/overwrite",
         type: "POST",
@@ -226,7 +232,7 @@ $(document).ready(function () {
     }
     else if (openedListIndex === -1) {
       data = { list: listName, tasks: tasks};
-   
+      //if we are saving a new list:
       $.ajax({
         url: "http://localhost:3000/lists",
         type: "POST",
@@ -247,9 +253,7 @@ $(document).ready(function () {
       }
   }
 
-
-
-  // Display tasks
+  // Display tasks - generates the tasks-to-be-displayed HTML 
   function displayTasks() {
     const taskListElement = document.getElementById("current-list");
     taskListElement.innerHTML = ''; // Clear the existing tasks
@@ -276,9 +280,6 @@ $(document).ready(function () {
     });
   }
 
-
-
-
   // Save list
   $("#save-list-button").click(function () {
     let listName = $("#current-list-name").val().trim();
@@ -300,14 +301,13 @@ $(document).ready(function () {
       window.savedLists[openedListIndex] = { list_id: window.savedLists[openedListIndex].list_id, list: listName, tasks: tasks.slice() };
     }
 
+    //save to database
     saveList(listName, openedListIndex, savedLists);
 
     $("#current-list-name").val("");
     window.openedListIndex = -1;
     fetchAndDisplaySavedLists(); // Call this function to fetch and display the latest saved lists
   });
-
-
 
   function fetchAndDisplaySavedLists() {
     $.ajax({
@@ -353,12 +353,14 @@ $(document).ready(function () {
   /* LISTS */
   // Remove saved list
   function removeSavedList(listId) {
+    // match the clicked list's index in our savedLists array
     index = savedLists.findIndex(x => x.list_id = listId);
     if (listId === -1) {
       console.error(`List '${listId}' not found in savedLists`);
       return;
     }
 
+    // send the DELETE request to delete from database
     $.ajax({
       url: `http://localhost:3000/lists/${listId}`,
       type: 'DELETE',
@@ -374,13 +376,13 @@ $(document).ready(function () {
       },
     });
 
+    //remove from savedLists and refresh display
     savedLists.splice(index, 1);
-    displaySavedLists();
+    // displaySavedLists();
     $('#new-list-button').click();
   }
 
-
-
+  // Fetch and display lists
   function displaySavedLists() {
     $.ajax({
       url: 'http://localhost:3000/lists',
@@ -398,8 +400,7 @@ $(document).ready(function () {
           let listElement = $("<li>")
             .addClass("saved-list-title")
             .text(list.list)
-          //.click(function () {
-          listElement.click(function () {
+            listElement.click(function () {
             $.ajax({
               url: `http://localhost:3000/lists/${list.list_id}/tasks`,
               type: 'GET',
@@ -432,8 +433,6 @@ $(document).ready(function () {
       },
     });
   }
-
-
   displaySavedLists();
 });
 
@@ -461,6 +460,7 @@ listName.addEventListener("keypress", function (e) {
 });
 //
 
+//Change colour scheme to dark
 function DarkTheme() {
   console.log("Changed theme to Dark");
   $("#css-link").attr("href", "./css/dark_theme.css");
@@ -468,6 +468,7 @@ function DarkTheme() {
   $("#light-theme-icon").attr("src", "./img/light-icon-white.png");
 }
 
+//Change colour scheme to light
 function LightTheme() {
   console.log("Changed theme to Light");
   $("#css-link").attr("href", "./css/light_theme.css");
